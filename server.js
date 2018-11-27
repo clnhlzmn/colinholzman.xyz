@@ -26,10 +26,7 @@ const credentials = {
 
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
+app.use('/', express.static('index.html'));
 
 app.use('/blog', express.static('/home/admin/blog'));
 
