@@ -13,6 +13,8 @@ const privateKey = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/privk
 const certificate = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/cert.pem', 'utf8');
 const ca = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/chain.pem', 'utf8');
 
+const index = fs.readFileSync(path.join(__dirname, 'index.html'));
+
 const credentials = {
     key: privateKey,
     cert: certificate,
@@ -27,7 +29,7 @@ const credentials = {
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
 
 app.get('/', (req, res) => {
-    res.send('hi');
+    res.send(index);
 });
 
 
