@@ -1,0 +1,68 @@
+Unspecified Webserver on Debian 8 (jessie)
+Note:
+
+Certbot is meant to be run on the server where your website is hosted. If you don't have administrative shell access to your webserver or you're not familiar with command line server administration, you should check if your hosting provider has built-in Let's Encrypt support by contacting them or checking this list of supporting providers.
+Install
+Note for existing Debian 8 Certbot users
+
+NOTE: We previously suggested using the operating system-provided packaged version of Certbot on Debian 8 (jessie). Because of important updates in the Certbot code, we are now recommending that Debian 8 users switch to the certbot-auto method, described below.
+
+If this is your first time installing Certbot on your Debian 8 system, you do not need to do anything else before installing certbot-auto. But if you've previously installed Certbot via apt-get on your Debian 8 system, we recommend uninstalling the packaged version before continuing with the other steps below, in order to avoid potential conflicts between the two versions. You can do this with
+
+sudo apt-get remove certbot
+
+If you don't remember whether or not you've installed the packaged version of Certbot, there is no harm in running this command; if the packaged version of Certbot isn't installed on your system, the command has no effect. Uninstalling the packaged version of Certbot does not delete your existing certificates, if any.
+Installing certbot-auto on your system
+
+Since it doesn't seem like your operating system has an up-to-date packaged version of Certbot, you should remove any previously installed packaged version, if applicable, and then use our certbot-auto script to get an up-to-date copy:
+
+wget https://dl.eff.org/certbot-auto
+chmod a+x certbot-auto
+
+certbot-auto accepts the same flags as certbot; it installs all of its own dependencies and updates the client code automatically.
+
+Certbot's DNS plugins which can be used to automate obtaining a wildcard certificate from Let's Encrypt's ACMEv2 server are not available for your OS yet. This should change soon but if you don't want to wait, you can use these plugins now by running Certbot in Docker instead of using the instructions on this page.
+Get Started
+
+Certbot supports a number of different “plugins” that can be used to obtain and/or install certificates.
+
+Since your server architecture doesn't yet support automatic installation you'll have to use the certonly command to obtain your certificate.
+
+$ sudo ./path/to/certbot-auto certonly
+
+This will allow you interactively select the plugin and options used to obtain your certificate. If you already have a webserver running, we recommend choosing the "webroot" plugin.
+
+Alternatively, you can specify more information on the command line.
+
+To obtain a cert using the "webroot" plugin, which can work with the webroot directory of any webserver software:
+
+$ sudo ./path/to/certbot-auto certonly --webroot -w /var/www/example -d example.com -d www.example.com -w /var/www/thing -d thing.is -d m.thing.is
+
+This command will obtain a single cert for example.com, www.example.com, thing.is, and m.thing.is; it will place files below /var/www/example to prove control of the first two domains, and under /var/www/thing for the second pair.
+Note:
+
+To use the webroot plugin, your server must be configured to serve files from hidden directories. If /.well-known is treated specially by your webserver configuration, you might need to modify the configuration to ensure that files inside /.well-known/acme-challenge are served by the webserver.
+
+To obtain a cert using a built-in “standalone” webserver (you may need to temporarily stop your existing webserver, if any) for example.com and www.example.com:
+
+$ sudo ./path/to/certbot-auto certonly --standalone -d example.com -d www.example.com
+
+Automating renewal
+
+Certbot can be configured to renew your certificates automatically before they expire. Since Let's Encrypt certificates last for 90 days, it's highly advisable to take advantage of this feature. You can test automatic renewal for your certificates by running this command:
+
+$ sudo ./path/to/certbot-auto renew --dry-run
+
+If that appears to be working correctly, you can arrange for automatic renewal by adding a cron job or systemd timer which runs the following:
+
+./path/to/certbot-auto renew
+
+Note:
+
+if you're setting up a cron or systemd job, we recommend running it twice per day (it won't do anything until your certificates are due for renewal or revoked, but running it regularly would give your site a chance of staying online in case a Let's Encrypt-initiated revocation happened for some reason). Please select a random minute within the hour for your renewal tasks.
+
+An example cron job might look like this, which will run at noon and midnight every day:
+
+0 0,12 * * * python -c 'import random; import time; time.sleep(random.random() * 3600)' && ./path/to/certbot-auto renew 
+
+More detailed information and options about renewal can be found in the full documentation.
