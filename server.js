@@ -26,10 +26,11 @@ const credentials = {
     //next();
 //});
 
-app.use(favicon(path.join(__dirname, 'favicon.ico')));
+//app.use(favicon(path.join(__dirname, 'favicon.ico')));
+app.use(favicon('favicon.ico'));
 
 app.get('/', (req, res) => {
-    res.send(index);
+    res.sendFile('index.html');
 });
 
 
