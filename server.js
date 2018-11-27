@@ -17,9 +17,15 @@ const credentials = {
     ca: ca
 };
 
+//app.use(function (req, res, next) {
+    //console.log(req.url);
+    //next();
+//});
+
 app.get('/', (req, res) => {
     res.send('hi');
 });
+
 
 app.use('/blog', express.static('/home/admin/blog'));
 
