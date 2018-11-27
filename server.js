@@ -17,11 +17,11 @@ const credentials = {
     ca: ca
 };
 
-app.use('/', (req, res) => {
-    res.redirect('/blog');
-});
+//app.get('/', (req, res) => {
+    //res.redirect('/blog');
+//});
 
-app.use('/blog', express.static('/home/admin/blog'));
+app.use(express.static('/home/admin/blog'));
 
 //app.use((req, res) => {
     //res.send('Hello there !');
