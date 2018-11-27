@@ -21,6 +21,11 @@ const credentials = {
     //res.redirect('/blog');
 //});
 
+//app.use(function (req, res, next) {
+    //console.log(req.url);
+    //next();
+//});
+
 app.use(express.static('/home/admin/blog'));
 
 //app.use((req, res) => {
