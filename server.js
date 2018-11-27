@@ -3,6 +3,7 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const express = require('express');
+const favicon = require('serve-favicon')
 
 const app = express();
 
@@ -21,6 +22,8 @@ const credentials = {
     //console.log(req.url);
     //next();
 //});
+
+app.use(favicon(path.join(__dirname, 'favicon.ico')));
 
 app.get('/', (req, res) => {
     res.send('hi');
