@@ -30,6 +30,12 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+const resume = fs.readFileSync(path.join(__dirname, 'index.html'));
+
+app.get('/resume', (req, res) => {
+    res.send(resume);
+});
+
 app.use('/blog', express.static('/home/admin/blog'));
 
 //app.use((req, res) => {
