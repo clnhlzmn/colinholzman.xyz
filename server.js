@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-const resume = fs.readFileSync(path.join(__dirname, 'index.html'));
+const resume = fs.readFileSync(path.join(__dirname, 'resume.pdf'));
 
 app.get('/resume', (req, res) => {
     res.send(resume);
