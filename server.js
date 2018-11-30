@@ -38,6 +38,8 @@ app.get('/resume.pdf', (req, res) => {
 
 app.use('/blog', express.static('/home/admin/blog'));
 
+app.use('/photos', express.static('/home/admin/photos'));
+
 //app.use((req, res) => {
     //res.send('Hello there !');
 //});
