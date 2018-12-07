@@ -8,17 +8,6 @@ const favicon = require('serve-favicon')
 
 const app = express();
 
-// Certificate
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/chain.pem', 'utf8');
-
-const credentials = {
-    key: privateKey,
-    cert: certificate,
-    ca: ca
-};
-
 //app.use(function (req, res, next) {
     //console.log(req.url);
     //next();
@@ -36,19 +25,35 @@ app.get('/resume.pdf', (req, res) => {
     res.send(resume);
 });
 
+app.get('/cam', (req, res) => {
+    res.sendFile(path.join(__dirname, 'cam.html'));
+});
+
 app.use('/blog', express.static('/home/admin/blog'));
 
 app.use('/photos', express.static('/home/admin/photos'));
 
-//app.use((req, res) => {
-    //res.send('Hello there !');
-//});
-
 // Starting both http & https servers
-//const httpServer = http.createServer(app);
+const httpServer = http.createServer(app);
+
+httpServer.listen(80, () => {
+    //console.log('HTTP server running on port 80');
+});
+
+// Certificate
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/chain.pem', 'utf8');
+
+const credentials = {
+    key: privateKey,
+    cert: certificate,
+    ca: ca
+};
+
 const httpsServer = https.createServer(credentials, app);
 
 httpsServer.listen(443, () => {
-    //console.log('HTTPS Server running on port 443');
+    //console.log('HTTPS server running on port 443');
 });
 
