@@ -33,6 +33,8 @@ app.use('/blog', express.static('/home/admin/blog'));
 
 app.use('/photos', express.static('/home/admin/photos'));
 
+app.use('/.well-known', express.static('/home/admin/.well-known'));
+
 // Starting both http & https servers
 const httpServer = http.createServer(app);
 
