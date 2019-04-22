@@ -15,9 +15,11 @@ const app = express();
 
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+//app.get('/', (req, res) => {
+    //res.sendFile(path.join(__dirname, 'index.html'));
+//});
+
+app.use('/', express.static('/home/admin/blog'));
 
 const resume = fs.readFileSync(path.join(__dirname, 'resume.pdf'));
 
@@ -29,9 +31,9 @@ app.get('/cam', (req, res) => {
     res.sendFile(path.join(__dirname, 'cam.html'));
 });
 
-app.use('/blog', express.static('/home/admin/blog'));
-
-app.use('/photos', express.static('/home/admin/photos'));
+//app.use('/blog', express.static('/home/admin/blog'));
+//
+//app.use('/photos', express.static('/home/admin/photos'));
 
 app.use('/.well-known', express.static('/home/admin/.well-known'));
 
