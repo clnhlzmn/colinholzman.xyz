@@ -15,25 +15,12 @@ const app = express();
 
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
 
-//app.get('/', (req, res) => {
-    //res.sendFile(path.join(__dirname, 'index.html'));
-//});
-
 app.use('/', express.static('/home/admin/blog'));
 
-const resume = fs.readFileSync(path.join(__dirname, 'resume.pdf'));
-
-app.get('/resume.pdf', (req, res) => {
-    res.send(resume);
+app.get('/cam/*', (req, res) => {
+    const port = req.url.substr(5)
+    res.redirect(`http://colincloud.duckdns.org:${port}/`)
 });
-
-app.get('/cam', (req, res) => {
-    res.sendFile(path.join(__dirname, 'cam.html'));
-});
-
-//app.use('/blog', express.static('/home/admin/blog'));
-//
-//app.use('/photos', express.static('/home/admin/photos'));
 
 app.use('/.well-known', express.static('/home/admin/.well-known'));
 
@@ -44,7 +31,7 @@ httpServer.listen(80, () => {
     //console.log('HTTP server running on port 80');
 });
 
-// Certificate
+ //Certificate
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/cert.pem', 'utf8');
 const ca = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/chain.pem', 'utf8');
