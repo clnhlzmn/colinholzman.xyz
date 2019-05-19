@@ -17,11 +17,6 @@ app.use(favicon(path.join(__dirname, 'favicon.ico')));
 
 app.use('/', express.static('/home/admin/blog'));
 
-app.get('/cam/*', (req, res) => {
-    const port = req.url.substr(5)
-    res.redirect(`http://colincloud.duckdns.org:${port}/`)
-});
-
 app.use('/.well-known', express.static('/home/admin/.well-known'));
 
 // Starting both http & https servers
