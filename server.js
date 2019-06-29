@@ -5,6 +5,7 @@ const http = require('http');
 const https = require('https');
 const express = require('express');
 const favicon = require('serve-favicon')
+const crypto = require('crypto')
 
 const app = express();
 
@@ -31,13 +32,14 @@ const privateKey = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/privk
 const certificate = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/cert.pem', 'utf8');
 const ca = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/chain.pem', 'utf8');
 
-const credentials = {
+const options = {
     key: privateKey,
     cert: certificate,
-    ca: ca
+    ca: ca,
+    secureOptions: crypto.constants.SSL_OP_NO_TLSv1_1 | crypto.constants.SSL_OP_NO_TLSv1
 };
 
-const httpsServer = https.createServer(credentials, app);
+const httpsServer = https.createServer(options, app);
 
 httpsServer.listen(443, () => {
     //console.log('HTTPS server running on port 443');
