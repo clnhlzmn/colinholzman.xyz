@@ -16,9 +16,12 @@ const app = express();
 
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
 
-app.use('/', express.static('/home/admin/blog'));
-
-app.use('/.well-known', express.static('/home/admin/.well-known'));
+if (process.env.NODE_ENV === 'local') {
+    app.use('/', express.static('../blog/_site'));
+} else {
+    app.use('/', express.static('/home/admin/blog'));
+    app.use('/.well-known', express.static('/home/admin/.well-known'));
+}
 
 // Starting both http & https servers
 const httpServer = http.createServer(app);
@@ -28,11 +31,19 @@ httpServer.listen(80, () => {
 });
 
  //Certificate
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/chain.pem', 'utf8');
+var privateKey = undefined
+var certificate = undefined
+var ca = undefined
+if (process.env.NODE_ENV === 'local') {
+    privateKey = fs.readFileSync('localCert/server.key')
+    certificate = fs.readFileSync('localCert/server.cert')
+} else {
+    privateKey = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/privkey.pem', 'utf8');
+    certificate = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/cert.pem', 'utf8');
+    ca = fs.readFileSync('/etc/letsencrypt/live/colinholzman.xyz/chain.pem', 'utf8');
+}
 
-const options = {
+options = {
     key: privateKey,
     cert: certificate,
     ca: ca,
